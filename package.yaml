@@ -35,6 +35,9 @@ executables:
       - -with-rtsopts=-N
     dependencies:
       - hello-haskell
+    when:
+      - condition: false
+        other-modules: Paths_hello_haskell
 
 tests:
   hello-haskell-test:
