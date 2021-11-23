@@ -1,6 +1,11 @@
 module Lib
-    ( someFunc
+    ( hello 
+    , doubleMe
     ) where
 
-someFunc :: IO ()
-someFunc = putStrLn "someFunc"
+-- hello world
+hello :: IO ()
+hello = putStrLn "Hello Haskell"
+
+-- baby steps
+doubleMe x = x + x
