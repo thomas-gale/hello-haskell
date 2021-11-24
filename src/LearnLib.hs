@@ -11,6 +11,7 @@ module LearnLib
     Shape (..),
     square,
     area,
+    isAllDigits,
   )
 where
 
@@ -33,9 +34,7 @@ left :: Pos Int -> Pos Int
 left (x, y) = (x - 1, y)
 
 -- declare data (completely new type).
--- False and True are constructors for the type - must always begin with capital letter.
-data Bool = False | True
-
+-- Yes, No etc. are constructors for the type - must always begin with capital letter.
 data Answer = Yes | No | Unknown
   deriving (Show)
 
@@ -57,3 +56,7 @@ square n = Rect n n
 area :: Shape -> Float
 area (Circle r) = pi * r ^ 2
 area (Rect x y) = x * y
+
+isAllDigits :: [Char] -> Bool
+isAllDigits "" = False
+isAllDigits val = all ((== True) . (\x -> x `elem` ['1', '2', '3', '4', '5', '6', '7', '8', '9'])) val
