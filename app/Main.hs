@@ -1,6 +1,6 @@
 module Main where
 
-import Lib
+import LearnLib
 
 main :: IO ()
-main = hello 
+main = hello

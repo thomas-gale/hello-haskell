@@ -1,4 +1,4 @@
-import Lib
+import LearnLib
 import Test.QuickCheck
 
 main :: IO ()

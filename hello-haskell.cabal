@@ -25,7 +25,7 @@ source-repository head
 
 library
   exposed-modules:
-      Lib
+      LearnLib
   other-modules:
       Paths_hello_haskell
   hs-source-dirs:

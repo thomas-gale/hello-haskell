@@ -1,4 +1,5 @@
-module Lib
+-- A giant pile of experimental garbage.
+module LearnLib
   ( hello,
     doubleMe,
     doubleUs,
