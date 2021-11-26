@@ -26,6 +26,7 @@ source-repository head
 library
   exposed-modules:
       LearnLib
+      Sudoku
   other-modules:
       Paths_hello_haskell
   hs-source-dirs:
