@@ -13,7 +13,7 @@ module LearnLib
     area,
     isAllDigits,
     BTree (..),
-    tree1,
+    btree1,
   )
 where
 
@@ -68,4 +68,4 @@ isAllDigits val = all ((== True) . (\x -> x `elem` ['1', '2', '3', '4', '5', '6'
 data BTree a = Empty | BTree a (BTree a) (BTree a)
   deriving (Show)
 
-tree1 = BTree 2 (BTree 7 (BTree 2 Empty Empty) (BTree 6 Empty Empty)) (BTree 5 Empty (BTree 9 (BTree 4 Empty Empty) Empty))
+btree1 = BTree 2 (BTree 7 (BTree 2 Empty Empty) (BTree 6 Empty Empty)) (BTree 5 Empty (BTree 9 (BTree 4 Empty Empty) Empty))
