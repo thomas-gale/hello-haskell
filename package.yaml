@@ -23,7 +23,10 @@ dependencies:
   - base >= 4.7 && < 5
 
 library:
-  source-dirs: src
+  source-dirs:
+    - src
+    - src/aoc
+    - src/aoc2021
 
 executables:
   hello-haskell-exe:
@@ -42,7 +45,9 @@ executables:
 tests:
   hello-haskell-test:
     main: Spec.hs
-    source-dirs: test
+    source-dirs: 
+      - test
+      - test/aoc2021
     ghc-options:
       - -threaded
       - -rtsopts
