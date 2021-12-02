@@ -30,6 +30,7 @@ library
       Sudoku
       AoCUtil
       AoC2021Day1
+      AoC2021Day2
   other-modules:
       Paths_hello_haskell
   hs-source-dirs:
@@ -55,6 +56,7 @@ test-suite hello-haskell-test
   main-is: Spec.hs
   other-modules:
       AoC2021TestDay1
+      AoC2021TestDay2
       Paths_hello_haskell
   hs-source-dirs:
       test
