@@ -5,7 +5,6 @@ import AoCUtil
 
 run :: IO ()
 run = do
-  line <- readFile "./test/aoc2015/Day2.s.in"
-  print line
-  -- print $ part1 line
-  -- print $ part2 line
+  lines <- getLines "./test/aoc2015/Day2.in"
+  print $ part1 lines
+  print $ part2 lines
