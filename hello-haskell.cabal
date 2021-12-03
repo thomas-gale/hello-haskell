@@ -29,6 +29,8 @@ library
       Monads
       Sudoku
       AoCUtil
+      AoC2015Day1
+      AoC2015Day2
       AoC2021Day1
       AoC2021Day2
       AoC2021Day3
@@ -38,6 +40,7 @@ library
   hs-source-dirs:
       src
       src/aoc
+      src/aoc2015
       src/aoc2021
   build-depends:
       base >=4.7 && <5
@@ -57,6 +60,8 @@ test-suite hello-haskell-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
+      AoC2015TestDay1
+      AoC2015TestDay2
       AoC2021TestDay1
       AoC2021TestDay2
       AoC2021TestDay3
@@ -64,6 +69,7 @@ test-suite hello-haskell-test
       Paths_hello_haskell
   hs-source-dirs:
       test
+      test/aoc2015
       test/aoc2021
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:

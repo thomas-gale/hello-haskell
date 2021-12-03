@@ -26,6 +26,7 @@ library:
   source-dirs:
     - src
     - src/aoc
+    - src/aoc2015
     - src/aoc2021
 
 executables:
@@ -47,6 +48,7 @@ tests:
     main: Spec.hs
     source-dirs: 
       - test
+      - test/aoc2015
       - test/aoc2021
     ghc-options:
       - -threaded
