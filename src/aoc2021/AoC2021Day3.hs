@@ -7,13 +7,13 @@ type Bit = Int
 parseInput :: [String] -> [[Bit]]
 parseInput = map (map (read . pure :: Char -> Bit))
 
--- Given a bit (0 or 1), sum the number of occurances in the list of [bit] input
+-- Given a bit (0 or 1), sum the number of occurances in the [[bit]] input
 countBits :: Bit -> [[Bit]] -> [Bit]
-countBits bit = foldl (zipWith (\a b -> if b == bit then a + 1 else a)) (repeat (0 :: Bit))
+countBits bit = foldl (zipWith (\a b -> if b == bit then a + 1 else a)) (repeat 0)
 
--- mostCommon use op (>=) least common use op (<)
-most :: (Bit -> Bit -> Bool) -> [[Bit]] -> [Bit]
-most op bss = zipWith (\o z -> (if o `op` z then 1 else 0)) ones zeros
+-- most common use op (>=) least common use op (<)
+common :: (Bit -> Bit -> Bool) -> [[Bit]] -> [Bit]
+common op bss = zipWith (\o z -> (if o `op` z then 1 else 0)) ones zeros
   where
     ones = countBits 1 bss
     zeros = countBits 0 bss
@@ -25,22 +25,22 @@ part1 :: [String] -> Int
 part1 ss = gamma * epsilon
   where
     input = parseInput ss
-    gamma = convertToDecimal $ most (>=) input
-    epsilon = convertToDecimal $ most (<) input
+    gamma = convertToDecimal $ common (>=) input
+    epsilon = convertToDecimal $ common (<) input
 
 type Filter = [Bit]
 
 filterBits :: Filter -> [Bit] -> Bool
 filterBits filter bs = all (== True) (zipWith (==) filter bs)
 
--- op == (>) for most commmon and (<) for least common
+-- op == (>=) for most commmon and (<) for least common
 -- start this recusive function with empty [] filter
 rating :: (Bit -> Bit -> Bool) -> Filter -> [[Bit]] -> [[Bit]]
 rating _ _ [] = []
 rating _ _ [x] = [x]
 rating op oldfilter bss = rating op newFilter filteredBss
   where
-    newFilter = oldfilter ++ [most op bss !! length oldfilter]
+    newFilter = oldfilter ++ [common op bss !! length oldfilter]
     filteredBss = filter (filterBits newFilter) bss
 
 oxygenGeneratorRating :: [[Bit]] -> Int
