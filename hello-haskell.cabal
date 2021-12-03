@@ -31,6 +31,7 @@ library
       AoCUtil
       AoC2021Day1
       AoC2021Day2
+      AoC2021Day3
   other-modules:
       Paths_hello_haskell
   hs-source-dirs:
@@ -57,6 +58,7 @@ test-suite hello-haskell-test
   other-modules:
       AoC2021TestDay1
       AoC2021TestDay2
+      AoC2021TestDay3
       Paths_hello_haskell
   hs-source-dirs:
       test
