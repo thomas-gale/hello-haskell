@@ -5,5 +5,5 @@ import AoCUtil
 
 run :: IO ()
 run = do
-  lines <- getLines "./test/aoc2021/Day4.in"
-  print lines
+  lines <- getLines "./test/aoc2021/Day4.s.in"
+  print $ parseLines lines
