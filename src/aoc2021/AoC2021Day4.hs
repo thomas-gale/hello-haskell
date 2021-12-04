@@ -1,4 +1,4 @@
-module AoC2021Day4 (parseLinesToBingo, playBingo) where
+module AoC2021Day4 (parseLinesToBingo, playBingo, part1) where
 
 import Data.List
 import Data.List.Split
@@ -7,19 +7,27 @@ import Data.String
 -- Types
 data Bingo = Bingo {draws :: [Int], boards :: [Board], bingoBoard :: Maybe Board}
 
-data Board = Board {rows :: [Row], isBingo :: Bool}
+data Board = Board {rows :: [Row], bingoNum :: Maybe Int}
 
 type Row = [Choice]
 
 data Choice = Choice {value :: Int, marked :: Bool}
 
 -- Logic
--- part1 :: [String] -> Int
--- part1 ss =
---   where
---     initialBingo = parseLinesToBingo ss
---     Bingo { boards=endbs } = playBingo initialBingo
---     winningBoard = head (filter (\b -> b ) endbs
+part1 :: [String] -> Int
+part1 ss = res
+  where
+    initialBingo = parseLinesToBingo ss
+    Bingo {bingoBoard = bb} = playBingo initialBingo
+    res = case bb of
+      (Just winb) -> computeBoardScore winb
+      Nothing -> -1
+
+computeBoardScore :: Board -> Int
+computeBoardScore Board {bingoNum = Nothing} = error "Can't score a board that isn't Bingo"
+computeBoardScore Board {rows = rs, bingoNum = (Just bn)} = bn * unmarkedSum
+  where
+    unmarkedSum = foldl (\acc Choice {value = v, marked = m} -> if not m then acc + v else acc) 0 (concat rs)
 
 playBingo :: Bingo -> Bingo
 playBingo Bingo {boards = []} = error "No boards!"
@@ -29,13 +37,20 @@ playBingo Bingo {draws = ds, boards = bs} = playBingo Bingo {draws = tail ds, bo
   where
     draw = head ds
     newBoards = map (markBoard draw) bs
-    bingoBoard = find isBingo newBoards
+    bingoBoard =
+      find
+        ( \Board {bingoNum = bn} -> case bn of
+            (Just _) -> True
+            Nothing -> False
+        )
+        newBoards
 
 markBoard :: Int -> Board -> Board
-markBoard draw Board {rows = rows, isBingo = ib} = Board {rows = newRows, isBingo = isBingo}
+markBoard _ Board {bingoNum = (Just _)} = error "Can't mark board, alreay Bingo!"
+markBoard draw Board {rows = rows, bingoNum = Nothing} = Board {rows = newRows, bingoNum = if isBingo then Just draw else Nothing}
   where
     newRows = map (markRow draw) rows
-    isBingo = checkBoardComplete (Board {rows = newRows, isBingo = ib})
+    isBingo = checkBoardComplete (Board {rows = newRows, bingoNum = Nothing})
 
 markRow :: Int -> Row -> Row
 markRow draw = map (\Choice {value = v, marked = m} -> Choice {value = v, marked = (draw == v) || m})
@@ -57,7 +72,7 @@ parseLinesToBingo :: [String] -> Bingo
 parseLinesToBingo ss = Bingo {draws = draws, boards = boards, bingoBoard = Nothing}
   where
     draws = map read (splitOn "," (head ss))
-    boards = map (\b -> Board {rows = map parseRow (take 5 b), isBingo = False}) (chunksOf 6 (drop 2 ss))
+    boards = map (\b -> Board {rows = map parseRow (take 5 b), bingoNum = Nothing}) (chunksOf 6 (drop 2 ss))
 
 parseRow :: String -> Row
 parseRow r = map newChoice (words r)
@@ -69,7 +84,7 @@ instance Show Bingo where
   show Bingo {draws = d, boards = bs} = show d ++ "\n\n" ++ concatMap (\b -> showBoard b ++ "\n\n") bs
 
 showBoard :: Board -> String
-showBoard Board {rows = rs, isBingo = ib} = concatMap (\r -> showRow r ++ "\n") rs ++ "Is Bingo: " ++ show ib ++ "\n"
+showBoard Board {rows = rs, bingoNum = bn} = concatMap (\r -> showRow r ++ "\n") rs ++ "Is Bingo: " ++ show bn ++ "\n"
 
 showRow :: Row -> String
 showRow = concatMap (\c -> show c ++ " ")
