@@ -28,8 +28,7 @@ part2 ss = score
   where
     initialBingo = parseLinesToBingo ss
     allBoards = playAllBingoBoards initialBingo
-    lastBoard = last allBoards
-    score = computeBoardScore lastBoard
+    score = computeBoardScore $ last allBoards
 
 computeBoardScore :: Board -> Int
 computeBoardScore Board {bingoNum = Nothing} = error "Can't score a board that isn't Bingo"
@@ -47,7 +46,7 @@ playAllBingoBoards Bingo {draws = ds, boards = bs} = bbs ++ playAllBingoBoards B
     filteredBs = filter (`notElem` bbs) remainBs
 
 playBingo :: Bingo -> Bingo
-playBingo Bingo {draws = ds, boards = bs, bingoBoards = bbs} | bbs /= [] = Bingo {draws = ds, boards = bs, bingoBoards = bbs} -- Check for Bingo!
+playBingo Bingo {draws = ds, boards = bs, bingoBoards = bbs} | bbs /= [] = Bingo {draws = ds, boards = bs, bingoBoards = bbs} -- Check for bingo boards (base case)
 playBingo Bingo {draws = ds, boards = bs, bingoBoards = []} = playBingo Bingo {draws = tail ds, boards = newBoards, bingoBoards = bingoBoards} -- Play normal step
   where
     draw = head ds
