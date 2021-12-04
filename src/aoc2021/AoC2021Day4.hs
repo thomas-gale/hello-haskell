@@ -1,27 +1,35 @@
-module AoC2021Day4 (parseLinesToBingo, playBingo, part1) where
+module AoC2021Day4 (part1, part2) where
 
 import Data.List
 import Data.List.Split
 import Data.String
 
 -- Types
-data Bingo = Bingo {draws :: [Int], boards :: [Board], bingoBoard :: Maybe Board}
+data Bingo = Bingo {draws :: [Int], boards :: [Board], bingoBoards :: [Board]}
 
 data Board = Board {rows :: [Row], bingoNum :: Maybe Int}
+  deriving (Eq)
 
 type Row = [Choice]
 
 data Choice = Choice {value :: Int, marked :: Bool}
+  deriving (Eq)
 
 -- Logic
 part1 :: [String] -> Int
-part1 ss = res
+part1 ss = score
   where
     initialBingo = parseLinesToBingo ss
-    Bingo {bingoBoard = bb} = playBingo initialBingo
-    res = case bb of
-      (Just winb) -> computeBoardScore winb
-      Nothing -> -1
+    Bingo {bingoBoards = bbs} = playBingo initialBingo
+    score = computeBoardScore $ head bbs
+
+part2 :: [String] -> Int
+part2 ss = score
+  where
+    initialBingo = parseLinesToBingo ss
+    allBoards = playAllBingoBoards initialBingo
+    lastBoard = last allBoards
+    score = computeBoardScore lastBoard
 
 computeBoardScore :: Board -> Int
 computeBoardScore Board {bingoNum = Nothing} = error "Can't score a board that isn't Bingo"
@@ -29,24 +37,32 @@ computeBoardScore Board {rows = rs, bingoNum = (Just bn)} = bn * unmarkedSum
   where
     unmarkedSum = foldl (\acc Choice {value = v, marked = m} -> if not m then acc + v else acc) 0 (concat rs)
 
+-- Plays bingo over all boards, create a list of boards as they win.
+playAllBingoBoards :: Bingo -> [Board]
+playAllBingoBoards Bingo {draws = []} = []
+playAllBingoBoards Bingo {boards = []} = []
+playAllBingoBoards Bingo {draws = ds, boards = bs} = bbs ++ playAllBingoBoards Bingo {draws = remainDs, boards = filteredBs, bingoBoards = []}
+  where
+    Bingo {draws = remainDs, boards = remainBs, bingoBoards = bbs} = playBingo Bingo {draws = ds, boards = bs, bingoBoards = []}
+    filteredBs = filter (`notElem` bbs) remainBs
+
 playBingo :: Bingo -> Bingo
-playBingo Bingo {boards = []} = error "No boards!"
-playBingo Bingo {draws = []} = error "Out of draws! (no bingo :()"
-playBingo Bingo {draws = ds, boards = bs, bingoBoard = (Just b)} = Bingo {draws = ds, boards = bs, bingoBoard = Just b} -- Check for Bingo!
-playBingo Bingo {draws = ds, boards = bs} = playBingo Bingo {draws = tail ds, boards = newBoards, bingoBoard = bingoBoard} -- Play normal step
+playBingo Bingo {draws = ds, boards = bs, bingoBoards = bbs} | bbs /= [] = Bingo {draws = ds, boards = bs, bingoBoards = bbs} -- Check for Bingo!
+playBingo Bingo {draws = ds, boards = bs, bingoBoards = []} = playBingo Bingo {draws = tail ds, boards = newBoards, bingoBoards = bingoBoards} -- Play normal step
   where
     draw = head ds
     newBoards = map (markBoard draw) bs
-    bingoBoard =
-      find
+    bingoBoards =
+      filter
         ( \Board {bingoNum = bn} -> case bn of
             (Just _) -> True
             Nothing -> False
         )
         newBoards
+playBingo _ = error "Unknown bingo case (empty draws/boards)"
 
 markBoard :: Int -> Board -> Board
-markBoard _ Board {bingoNum = (Just _)} = error "Can't mark board, alreay Bingo!"
+markBoard _ Board {rows = rows, bingoNum = (Just n)} = Board {rows = rows, bingoNum = Just n}
 markBoard draw Board {rows = rows, bingoNum = Nothing} = Board {rows = newRows, bingoNum = if isBingo then Just draw else Nothing}
   where
     newRows = map (markRow draw) rows
@@ -67,9 +83,9 @@ checkRowComplete = all (\Choice {marked = m} -> m)
 cols :: Board -> [Row]
 cols Board {rows = r} = transpose r
 
--- Helpers
+-- Helpers (parse inputs and pretty print boards)
 parseLinesToBingo :: [String] -> Bingo
-parseLinesToBingo ss = Bingo {draws = draws, boards = boards, bingoBoard = Nothing}
+parseLinesToBingo ss = Bingo {draws = draws, boards = boards, bingoBoards = []}
   where
     draws = map read (splitOn "," (head ss))
     boards = map (\b -> Board {rows = map parseRow (take 5 b), bingoNum = Nothing}) (chunksOf 6 (drop 2 ss))
@@ -90,7 +106,7 @@ showRow :: Row -> String
 showRow = concatMap (\c -> show c ++ " ")
 
 instance Show Choice where
-  show Choice {value = v, marked = m} = marked ++ show v ++ pad
+  show Choice {value = v, marked = m} = pad ++ show v ++ marked
     where
       pad = if v < 10 then "  " else " "
       marked = if m then "X" else " "
