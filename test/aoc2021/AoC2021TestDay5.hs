@@ -4,5 +4,6 @@ import AoC2021Day5
 import AoCUtil
 
 run = do
-  lines <- getLines "./test/aoc2021/Day5.s.in"
-  print lines
+  ss <- getLines "./test/aoc2021/Day5.in"
+  print $ part1 ss
+  print $ part2 ss
