@@ -1,8 +1,5 @@
 module AoC2021Day6 (part1, part2) where
 
-import qualified Data.List as L
-import qualified Data.List.Split as S
-
 type Days = Int
 
 type BreedCycle = Int
