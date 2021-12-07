@@ -4,5 +4,6 @@ import AoC2021Day7
 import AoCUtil
 
 run = do
-  ss <- getLines "./test/aoc2021/Day7.s.in"
-  print ss
+  xs <- getCsvInts "./test/aoc2021/Day7.in"
+  print $ part1 xs
+  print $ part2 xs

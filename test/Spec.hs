@@ -8,6 +8,7 @@ import qualified AoC2021TestDay4
 import qualified AoC2021TestDay5
 import qualified AoC2021TestDay6
 import qualified AoC2021TestDay7
+import qualified AoC2021TestDay8
 
 main :: IO ()
 main = do
@@ -20,7 +21,8 @@ main = do
   -- AoC2021TestDay4.run
   -- AoC2021TestDay5.run
   -- AoC2021TestDay6.run
-  AoC2021TestDay7.run
+  -- AoC2021TestDay7.run
+  AoC2021TestDay8.run
 
   --
   print "End of Tests."
