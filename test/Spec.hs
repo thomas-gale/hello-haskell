@@ -2,6 +2,7 @@ import qualified AoC2015TestDay1
 import qualified AoC2015TestDay2
 --
 import qualified AoC2021TestDay1
+import qualified AoC2021TestDay10
 import qualified AoC2021TestDay2
 import qualified AoC2021TestDay3
 import qualified AoC2021TestDay4
@@ -24,7 +25,8 @@ main = do
   -- AoC2021TestDay6.run
   -- AoC2021TestDay7.run
   -- AoC2021TestDay8.run
-  AoC2021TestDay9.run
+  -- AoC2021TestDay9.run
+  AoC2021TestDay10.run
 
   --
   print "End of Tests."
