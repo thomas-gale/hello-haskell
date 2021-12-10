@@ -33,6 +33,7 @@ library
       AoC2015Day2
       AoC2021Day1
       AoC2021Day10
+      AoC2021Day11
       AoC2021Day2
       AoC2021Day3
       AoC2021Day4
@@ -74,6 +75,7 @@ test-suite hello-haskell-test
       AoC2015TestDay2
       AoC2021TestDay1
       AoC2021TestDay10
+      AoC2021TestDay11
       AoC2021TestDay2
       AoC2021TestDay3
       AoC2021TestDay4
